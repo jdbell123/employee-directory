@@ -2,7 +2,7 @@ function SearchBox(props) {
 
     return (
         <form className="search w-25 m-auto">
-        <div className="form-group">
+        <div className="form-group m-2">
           <input
             className="form-control"
             type="text"
