@@ -72,7 +72,9 @@ class Container extends Component {
     } else {
       sortid = "-1"
     }
-    const sSortName = event.target.innerHTML.toLowerCase() + "Sort";
+    let sSortName = event.target.innerHTML.toLowerCase() + "Sort";
+    sSortName = sSortName.replace(" ", "_");
+  
     switch (this.state.currentSort) {
       case "des":
         this.setState({ employees: sortAsc, currentSort: "asc", [sSortName]: sortid });
