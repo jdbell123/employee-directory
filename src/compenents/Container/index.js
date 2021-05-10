@@ -7,6 +7,7 @@ import API from "../../utils/API";
 
 class Container extends Component {
   state = {
+    originalData: [],
     employees: [],
     currentSort: "des",
     search: "",
@@ -20,7 +21,10 @@ class Container extends Component {
   componentDidMount() {
     API.getRandomEmployee()
       .then((res) => {
-        this.setState({ employees: res.data.results });
+        this.setState({
+          originalData: res.data.results,
+          employees: res.data.results
+        });
       })
       .catch((err) => console.log(err));
   }
@@ -85,13 +89,32 @@ class Container extends Component {
 
   handleInputChange = (event) => {
     this.setState({ search: event.target.value });
+
+    let regex = event.target.value
+
+    let filteredResults = ([...this.state.originalData].filter(function (data) {
+      return (data.name.first + " " + data.name.last).match(new RegExp(regex, 'gi'))
+        || data.phone.match(new RegExp(regex, 'gi'))
+        || data.email.match(new RegExp(regex, 'gi'))
+    })
+    );
+
+    if (filteredResults) {
+      this.setState(
+        {
+          employees: filteredResults
+        }
+      )
+    }
   };
 
   render() {
     return (
       <div>
         <Navbar />
-        <SearchBox />
+        <SearchBox
+          handleInputChange={this.handleInputChange}
+        />
         <EmployeeTable
           results={this.state.employees}
           handleTableHeaderClick={this.handleTableHeaderClick}
